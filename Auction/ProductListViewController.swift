@@ -78,14 +78,28 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         super.viewDidLoad()
         navigationItem.title = "Choose an Item"
         navigationController?.navigationBar.barTintColor = UIColor(red: 224.0/255.0, green: 35.0/255.0, blue: 67.0/255.0, alpha: 1.0)
-        if yourJsonFormat == "JSONFile" {
+       /* if yourJsonFormat == "JSONFile" {
             //jsonParsingFromFile()
             jsonParsingFromURL()
         } else {
             jsonParsingFromURL()
-        }
+        }*/
+        
+        jsonParsingFromURL()
+        self.lstTableView.addSubview(self.refreshControl)
     }
     
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // Add a background view to the table view
+        let backgroundImage = UIImage(named: "Image-1.jpg")
+        let imageView = UIImageView(image: backgroundImage)
+        self.lstTableView.backgroundView = imageView
+    }
+
     
     func jsonParsingFromURL () {
         let url = URL(string: "http://localhost:8992/product/list")
@@ -101,14 +115,32 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         
         let dict: NSDictionary!=(try! JSONSerialization.jsonObject(with: data as Data, options: JSONSerialization.ReadingOptions.mutableContainers)) as! NSDictionary
         
-        for i in 0..<(dict.value(forKey: "Productlist") as! NSArray).count
+        for i in 0..<(dict.value(forKey: "productList") as! NSArray).count
         {
-           arrDict.add((dict.value(forKey: "Productlist") as! NSArray).object(at: i))
+           arrDict.add((dict.value(forKey: "productList") as! NSArray).object(at: i))
             print (String(describing: arrDict[i]))
         }
         lstTableView .reloadData()
     }
     
+    
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:
+            #selector(ProductListViewController.handleRefresh(_:)),
+                                 for: UIControlEvents.valueChanged)
+        refreshControl.tintColor = UIColor.red
+        
+        return refreshControl
+    }()
+    
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        
+        self.arrDict.removeAllObjects()
+        jsonParsingFromURL ()
+        self.lstTableView.reloadData()
+        refreshControl.endRefreshing()
+    }
 
     /*override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -121,6 +153,7 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         print ("Hi1")
         return 1
     }
+    
 }
 
 
