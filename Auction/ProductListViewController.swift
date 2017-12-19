@@ -28,7 +28,7 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         return arrDict.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print ("Hi3")
         let proto = "http://"
         let cell : TableViewCell! = tableView.dequeueReusableCell(withIdentifier: "TblViewCell") as! TableViewCell
@@ -77,8 +77,9 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Choose an Item"
-        navigationController?.navigationBar.barTintColor = UIColor(red: 224.0/255.0, green: 35.0/255.0, blue: 67.0/255.0, alpha: 1.0)
-       /* if yourJsonFormat == "JSONFile" {
+        //navigationController?.navigationBar.barTintColor = UIColor(red: 224.0/255.0, green: 35.0/255.0, blue: 67.0/255.0, alpha: 1.0)
+        navigationController?.navigationBar.barTintColor = UIColor(red: 46/255, green: 130/255, blue: 100/255, alpha: 1.0)
+        /* if yourJsonFormat == "JSONFile" {
             //jsonParsingFromFile()
             jsonParsingFromURL()
         } else {
@@ -98,6 +99,8 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         let backgroundImage = UIImage(named: "Image-1.jpg")
         let imageView = UIImageView(image: backgroundImage)
         self.lstTableView.backgroundView = imageView
+        
+        
     }
 
     
@@ -153,6 +156,10 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         print ("Hi1")
         return 1
     }
+    
+   
+    
+    
     
 }
 
