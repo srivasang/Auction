@@ -19,6 +19,9 @@
 		5D7E275D3977D7665AC2F9E6 /* Pods_AuctionTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 117B92B78355D7FECFC835D4 /* Pods_AuctionTests.framework */; };
 		8A0E56BB1FD7B9DA00707C45 /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0E56BA1FD7B9DA00707C45 /* LoginModel.swift */; };
 		8A0E56BC1FD7BFA100707C45 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A0E56BD1FD7BFA100707C45 /* Alamofire.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		8A3D58251FFCE2EE008C55E1 /* OAuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3D58241FFCE2EE008C55E1 /* OAuthResponse.swift */; };
+		8A3D58271FFCE324008C55E1 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3D58261FFCE324008C55E1 /* Utilities.swift */; };
+		8A3D58291FFCE870008C55E1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3D58281FFCE870008C55E1 /* Constants.swift */; };
 		8A8F4B281FBEC27A00A26F7A /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8F4B271FBEC27A00A26F7A /* TableViewCell.swift */; };
 		8AB690251FD7D42F005F8B6F /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB690241FD7D42F005F8B6F /* ProductDetailViewController.swift */; };
 		8ACB3BAF1FC45D9E0037E349 /* ProductListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8F4B251FBEBC1600A26F7A /* ProductListViewController.swift */; };
@@ -62,6 +65,9 @@
 		431FFBFBE64291DC4CE6C360 /* Pods-Auction.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Auction.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Auction/Pods-Auction.debug.xcconfig"; sourceTree = "<group>"; };
 		8A0E56BA1FD7B9DA00707C45 /* LoginModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
 		8A0E56BD1FD7BFA100707C45 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A3D58241FFCE2EE008C55E1 /* OAuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthResponse.swift; sourceTree = "<group>"; };
+		8A3D58261FFCE324008C55E1 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		8A3D58281FFCE870008C55E1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8A8F4B251FBEBC1600A26F7A /* ProductListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListViewController.swift; sourceTree = "<group>"; };
 		8A8F4B271FBEC27A00A26F7A /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		8AB690241FD7D42F005F8B6F /* ProductDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProductDetailViewController.swift; path = "../../../../../Downloads/Auction 2/Auction/ProductDetailViewController.swift"; sourceTree = "<group>"; };
@@ -125,6 +131,9 @@
 		05797B9A1FB9CAB3005473EF /* Auction */ = {
 			isa = PBXGroup;
 			children = (
+				8A3D58281FFCE870008C55E1 /* Constants.swift */,
+				8A3D58241FFCE2EE008C55E1 /* OAuthResponse.swift */,
+				8A3D58261FFCE324008C55E1 /* Utilities.swift */,
 				8A0E56BA1FD7B9DA00707C45 /* LoginModel.swift */,
 				05797B9B1FB9CAB3005473EF /* AppDelegate.swift */,
 				05797B9D1FB9CAB4005473EF /* ViewController.swift */,
@@ -364,10 +373,14 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Auction/Pods-Auction-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/AlamofireObjectMapper/AlamofireObjectMapper.framework",
+				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireObjectMapper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -486,6 +499,9 @@
 				8ACB3BAF1FC45D9E0037E349 /* ProductListViewController.swift in Sources */,
 				05797B9C1FB9CAB3005473EF /* AppDelegate.swift in Sources */,
 				8AB690251FD7D42F005F8B6F /* ProductDetailViewController.swift in Sources */,
+				8A3D58271FFCE324008C55E1 /* Utilities.swift in Sources */,
+				8A3D58251FFCE2EE008C55E1 /* OAuthResponse.swift in Sources */,
+				8A3D58291FFCE870008C55E1 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

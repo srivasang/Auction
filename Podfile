@@ -7,8 +7,8 @@ target 'Auction' do
 
   # Pods for Auction
 
-pod 'Alamofire', '~> 4.5'
-
+pod 'Alamofire', '~> 4.6'
+pod 'AlamofireObjectMapper', '~> 5.0'
   target 'AuctionTests' do
     inherit! :search_paths
     # Pods for testing

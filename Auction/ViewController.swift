@@ -6,22 +6,17 @@
 //  Copyright © 2017 PACE. All rights reserved.
 //
 
+
 import UIKit
 import Alamofire
+import ObjectMapper
 
 class ViewController: UIViewController,UITextFieldDelegate {
     
     @IBOutlet weak var userName: UITextField!
     @IBOutlet weak var password: UITextField!
-
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
- 
     
-    @IBAction func SignIn(_ sender: UIButton) {
-        activityIndicator.startAnimating()
-        invokeLogin()
-    }
-   
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,38 +26,59 @@ class ViewController: UIViewController,UITextFieldDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    // MARK: - Control Action Methods
+    @IBAction func SignIn(_ sender: UIButton) {
+        invokeLogin()
+        
+    }
     
+    // MARK: - Login
     func invokeLogin() {
-        let parameters = ["username": userName.text ?? "", "password": password.text ?? ""]
-        print (userName.text ?? "")
-        Alamofire.request("http://localhost:8991/login/auth", method: .post, parameters: parameters, encoding: URLEncoding.default).responseJSON { [weak self] response in
-            self?.handleResponse(response: response.result.value)
-        }
+        showSpinner()
+        //Call oAuthService
+        oauthService()
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        return true
-    }
-    func handleResponse(response: Any?) {
-        print(response ?? "$$$$$$$$$$$$$$$")
-        guard let responseJSON = response as? [String : Any], let status = responseJSON["status"] as? Int else {
-            showAlert()
+    func handleSuccessResponse(response: Any?) {
+        print(response ?? "")
+        hideSpinner()
+        
+        
+        guard let responseJSON = response as? [String : Any], let userId = responseJSON[kUserId] as? String else {
+            handleFailureResponse()
             return
         }
+        Utilities.sharedInstance.userId = userId
         
-        if status == 200 {
-            performSegue(withIdentifier: "ProductListViewController", sender: self)
-        } else {
-            showAlert()
-        }
-        activityIndicator.stopAnimating()
+        showAuctionDetailsView()
     }
     
+    func handleFailureResponse() {
+        hideSpinner()
+        showAlert()
+    }
+    
+    // MARK: - Activity Indicator
+    func showSpinner() {
+        self.activityIndicator?.startAnimating()
+    }
+    
+    func hideSpinner() {
+        self.activityIndicator?.stopAnimating()
+    }
+    
+    // MARK: - Auction Detail View
     func showAuctionDetailsView() {
-        self.performSegue(withIdentifier: "ProductListViewController", sender: self)
+        //        self.performSegue(withIdentifier: "AuctionDetailsViewController", sender: self)
+        self.performSegue(withIdentifier:"ProductListViewController", sender: self)
+        //       let Storyboard = UIStoryboard(name: "Main", bundle: nil)
+        //       let PVC = Storyboard.instantiateViewController(withIdentifier: "listView") as! ProductListViewController
+        //     self.navigationController?.pushViewController(PVC, animated: true)
+        //
+        
     }
     
+    // MARK: - Alert
     func showAlert() {
         let alert = UIAlertController(title: "Login Error", message: "Invalid Usernmae or Password Please try again!", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
@@ -70,3 +86,58 @@ class ViewController: UIViewController,UITextFieldDelegate {
     }
     
 }
+
+// MARK: - UITextViewDelegate
+extension ViewController: UITextViewDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return true
+    }
+    
+}
+
+// MARK: - OAuth Login
+extension ViewController {
+    
+    func oauthService() {
+        let credentials = "\(kOAuthUser):\(kOAuthPassword)"
+        if let data = credentials.data(using: String.Encoding(rawValue: String.Encoding.utf8.rawValue)) {
+            let headers = [kAuthorization: "Basic \(data.base64EncodedString())", kContentType: kApplicationJson]
+            let kTemp = kOAuthUrl + "&username=" + (self.userName?.text)!
+            let kUrl = kTemp + "&password=" + (self.password?.text)!
+            Alamofire.request(kUrl, method: .post, parameters: nil, encoding: URLEncoding.default, headers: headers).responseJSON { [weak self] response in
+                self?.handleOAuthResponse(response: response.result.value)
+            }
+        }
+        
+    }
+    
+    func handleOAuthResponse(response: Any?) {
+        print(response! as Any)        
+        guard let responseJSON = response as? [String : Any] else {
+                handleFailureResponse()
+                return
+            }
+        // Save OAuth Info into model
+        Utilities.sharedInstance.oauthResponse = Mapper<OAuthResponse>().map(JSON: responseJSON)
+        print(Utilities.sharedInstance.oauthResponse?.accessToken as Any)
+        activityIndicator.stopAnimating()
+        guard let _ = response as? [String : Any], let status = responseJSON["access_token"] as? String else {
+            print("STATUS-------<><><><><>", responseJSON["access_token"] as? String as Any )
+            showAlert()
+            return
+        }
+        
+        if status != " nil" {
+            performSegue(withIdentifier: "ProductListViewController", sender: self)
+        } else {
+            showAlert()
+        }
+        
+        
+    }
+    
+    
+}
+

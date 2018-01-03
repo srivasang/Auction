@@ -17,6 +17,8 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
     var strImageurl: NSString = ""
     var strProdDesc: NSString = ""
     var strProdBprice: NSInteger = 0
+    var strCurrPrice: NSInteger = 0
+    var strExpDate: NSInteger = 0
     var strProdId: NSString = ""
     var data : UIImage?
     
@@ -30,19 +32,23 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
     
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print ("Hi3")
-        let proto = "http://"
+        let proto = "http://localhost:8996"
         let cell : TableViewCell! = tableView.dequeueReusableCell(withIdentifier: "TblViewCell") as! TableViewCell
          strProdName = (arrDict[indexPath.row] as AnyObject) .value(forKey:"productName") as! NSString
         strImageurl = (arrDict[indexPath.row] as AnyObject) .value(forKey:"imageURL") as! NSString
          strProdDesc = (arrDict[indexPath.row] as AnyObject) .value(forKey:"description") as! NSString
         strProdBprice = (arrDict[indexPath.row] as AnyObject) .value(forKey:"basePrice") as! NSInteger
+        strCurrPrice = (arrDict[indexPath.row] as AnyObject) .value(forKey:"currentPrice") as! NSInteger
+        strExpDate = (arrDict[indexPath.row] as AnyObject) .value(forKey:"expiryDate") as! NSInteger
         strProdId = (arrDict[indexPath.row] as AnyObject) .value(forKey:"id") as! NSString
         //let strProdCprice : NSString=(arrDict[indexPath.row] as AnyObject) .value(forKey:"basePrice") as! NSString
         let strImage  = proto + String(strImageurl)
+        let epocTime = TimeInterval(strExpDate) / 1000
+        let myDate = Date(timeIntervalSince1970:  epocTime)
         cell.lblDetails.text=strProdName as String
-        cell.lblDesc.text=strProdDesc as String
+        cell.lblDesc.text=String (describing: myDate) as String
         cell.lblBp.text=String (strProdBprice) as String
-        cell.lblCp.text=String (strProdBprice)  as String
+        cell.lblCp.text=String (strCurrPrice)  as String
         let url = URL(string: strImage as String)
         DispatchQueue.global().async {
             if let data = try? Data(contentsOf: url!)
@@ -60,7 +66,7 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         let Storyboard = UIStoryboard(name: "Main", bundle: nil)
         let DVC = Storyboard.instantiateViewController(withIdentifier: "detailSegueId") as! ProductDetailViewController
         
-       DVC.getCellNo = indexPath.row
+        DVC.getCellNo = indexPath.row
         DVC.getImage = (arrDict[indexPath.row] as AnyObject) .value(forKey:"imageURL") as! NSString as String
         DVC.getName = (arrDict[indexPath.row] as AnyObject) .value(forKey:"productName") as! NSString as String
         DVC.currentBid = (arrDict[indexPath.row] as AnyObject) .value(forKey:"basePrice") as! NSInteger
@@ -105,8 +111,10 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
 
     
     func jsonParsingFromURL () {
-        let url = URL(string: "http://localhost:8992/product/list")
-        let request = URLRequest(url: url! as URL)
+        let url = URL(string: "http://localhost:8996/api/productserv/product/list")
+        var request = URLRequest(url: url! as URL)
+        request.addValue("bearer b3bd344b-76d2-4fb4-8f89-ab87dbe6e3d2", forHTTPHeaderField: "Authorization")
+
         
         NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main) {(response, data, error) in
           self.startParsing(data: data! as NSData)
