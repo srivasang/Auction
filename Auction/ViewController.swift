@@ -69,12 +69,9 @@ class ViewController: UIViewController,UITextFieldDelegate {
     
     // MARK: - Auction Detail View
     func showAuctionDetailsView() {
-        //        self.performSegue(withIdentifier: "AuctionDetailsViewController", sender: self)
+
         self.performSegue(withIdentifier:"ProductListViewController", sender: self)
-        //       let Storyboard = UIStoryboard(name: "Main", bundle: nil)
-        //       let PVC = Storyboard.instantiateViewController(withIdentifier: "listView") as! ProductListViewController
-        //     self.navigationController?.pushViewController(PVC, animated: true)
-        //
+       
         
     }
     

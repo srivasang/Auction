@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ObjectMapper
 
 class ProductListViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
     
@@ -21,6 +22,8 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
     var strExpDate: NSInteger = 0
     var strProdId: NSString = ""
     var data : UIImage?
+    
+
     
     @IBOutlet weak var lstTableView: UITableView!
     var arrDict :NSMutableArray=[]
@@ -69,10 +72,11 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         DVC.getCellNo = indexPath.row
         DVC.getImage = (arrDict[indexPath.row] as AnyObject) .value(forKey:"imageURL") as! NSString as String
         DVC.getName = (arrDict[indexPath.row] as AnyObject) .value(forKey:"productName") as! NSString as String
-        DVC.currentBid = (arrDict[indexPath.row] as AnyObject) .value(forKey:"basePrice") as! NSInteger
-        DVC.basePrice = (arrDict[indexPath.row] as AnyObject) .value(forKey:"basePrice") as! NSInteger
+        DVC.getCurrentBid = (arrDict[indexPath.row] as AnyObject) .value(forKey:"currentPrice") as! NSInteger
+        DVC.getBasePrice = (arrDict[indexPath.row] as AnyObject) .value(forKey:"basePrice") as! NSInteger
         DVC.getDesc = (arrDict[indexPath.row] as AnyObject) .value(forKey:"description") as! NSString as String
         DVC.getProdId = ((arrDict[indexPath.row] as AnyObject) .value(forKey:"id") as! NSString) as String
+        DVC.getExpDate = (arrDict[indexPath.row] as AnyObject) .value(forKey:"expiryDate") as! NSInteger
         // DVC.getTime = name[indexPath.row] as! String
         
         self.navigationController?.pushViewController(DVC, animated: true)
@@ -113,9 +117,7 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
     func jsonParsingFromURL () {
         let url = URL(string: "http://localhost:8996/api/productserv/product/list")
         var request = URLRequest(url: url! as URL)
-        request.addValue("bearer b3bd344b-76d2-4fb4-8f89-ab87dbe6e3d2", forHTTPHeaderField: "Authorization")
-
-        
+        request.addValue("bearer fdeca5f2-45ab-4c96-8e5b-5e043bffb9c0", forHTTPHeaderField: "Authorization")
         NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main) {(response, data, error) in
           self.startParsing(data: data! as NSData)
         }
