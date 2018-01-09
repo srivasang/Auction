@@ -119,6 +119,17 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         }
     }
     
+    func jsonParsingFromURLRef () {
+       
+            let url = URL(string: "http://localhost:8996/api/productserv/product/list")
+            var request = URLRequest(url: url! as URL)
+            request.addValue("Bearer \(GlobalVariables.sharedManager.myToken)", forHTTPHeaderField: "Authorization")
+            NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main) {(response, data, error) in
+                self.startParsing(data: data! as NSData)
+            }
+        
+    }
+    
     func startParsing(data :NSData)
     {
         
@@ -146,7 +157,7 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         
         self.arrDict.removeAllObjects()
-        jsonParsingFromURL ()
+        jsonParsingFromURLRef()
         self.lstTableView.reloadData()
         refreshControl.endRefreshing()
     }
