@@ -12,7 +12,7 @@ import ObjectMapper
 class ProductListViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
     
     
-    
+    let token = Utilities.sharedInstance.oauthResponse?.accessToken
     let yourJsonFormat: String = "JSONurl"
     var strProdName: NSString = ""
     var strImageurl: NSString = ""
@@ -23,7 +23,7 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
     var strProdId: NSString = ""
     var data : UIImage?
     
-
+    
     
     @IBOutlet weak var lstTableView: UITableView!
     var arrDict :NSMutableArray=[]
@@ -33,13 +33,13 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         return arrDict.count
     }
     
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print ("Hi3")
         let proto = "http://localhost:8996"
         let cell : TableViewCell! = tableView.dequeueReusableCell(withIdentifier: "TblViewCell") as! TableViewCell
-         strProdName = (arrDict[indexPath.row] as AnyObject) .value(forKey:"productName") as! NSString
+        strProdName = (arrDict[indexPath.row] as AnyObject) .value(forKey:"productName") as! NSString
         strImageurl = (arrDict[indexPath.row] as AnyObject) .value(forKey:"imageURL") as! NSString
-         strProdDesc = (arrDict[indexPath.row] as AnyObject) .value(forKey:"description") as! NSString
+        strProdDesc = (arrDict[indexPath.row] as AnyObject) .value(forKey:"description") as! NSString
         strProdBprice = (arrDict[indexPath.row] as AnyObject) .value(forKey:"basePrice") as! NSInteger
         strCurrPrice = (arrDict[indexPath.row] as AnyObject) .value(forKey:"currentPrice") as! NSInteger
         strExpDate = (arrDict[indexPath.row] as AnyObject) .value(forKey:"expiryDate") as! NSInteger
@@ -50,15 +50,15 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         let myDate = Date(timeIntervalSince1970:  epocTime)
         cell.lblDetails.text=strProdName as String
         cell.lblDesc.text=String (describing: myDate) as String
-        cell.lblBp.text=String (strProdBprice) as String
-        cell.lblCp.text=String (strCurrPrice)  as String
+        cell.lblBp.text="$" + String (strProdBprice) as String
+        cell.lblCp.text="$" + String (strCurrPrice)  as String
         let url = URL(string: strImage as String)
         DispatchQueue.global().async {
             if let data = try? Data(contentsOf: url!)
             {
-            DispatchQueue.main.async {
-                cell.productImg.image = UIImage(data: data)
-            }
+                DispatchQueue.main.async {
+                    cell.productImg.image = UIImage(data: data)
+                }
             }
         }
         
@@ -90,11 +90,11 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         //navigationController?.navigationBar.barTintColor = UIColor(red: 224.0/255.0, green: 35.0/255.0, blue: 67.0/255.0, alpha: 1.0)
         navigationController?.navigationBar.barTintColor = UIColor(red: 46/255, green: 130/255, blue: 100/255, alpha: 1.0)
         /* if yourJsonFormat == "JSONFile" {
-            //jsonParsingFromFile()
-            jsonParsingFromURL()
-        } else {
-            jsonParsingFromURL()
-        }*/
+         //jsonParsingFromFile()
+         jsonParsingFromURL()
+         } else {
+         jsonParsingFromURL()
+         }*/
         
         jsonParsingFromURL()
         self.lstTableView.addSubview(self.refreshControl)
@@ -104,7 +104,7 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
         // Add a background view to the table view
         let backgroundImage = UIImage(named: "Image-1.jpg")
         let imageView = UIImageView(image: backgroundImage)
@@ -112,14 +112,15 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         
         
     }
-
+    
     
     func jsonParsingFromURL () {
         let url = URL(string: "http://localhost:8996/api/productserv/product/list")
         var request = URLRequest(url: url! as URL)
-        request.addValue("bearer fdeca5f2-45ab-4c96-8e5b-5e043bffb9c0", forHTTPHeaderField: "Authorization")
+        request.addValue("bearer 98d216ca-2679-498c-a0c0-927190831ed5", forHTTPHeaderField: "Authorization")
+        //request.addValue("Bearer \(String(describing: token))", forHTTPHeaderField: "Authorization")
         NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main) {(response, data, error) in
-          self.startParsing(data: data! as NSData)
+            self.startParsing(data: data! as NSData)
         }
     }
     
@@ -130,7 +131,7 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         
         for i in 0..<(dict.value(forKey: "productList") as! NSArray).count
         {
-           arrDict.add((dict.value(forKey: "productList") as! NSArray).object(at: i))
+            arrDict.add((dict.value(forKey: "productList") as! NSArray).object(at: i))
             print (String(describing: arrDict[i]))
         }
         lstTableView .reloadData()
@@ -154,12 +155,12 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         self.lstTableView.reloadData()
         refreshControl.endRefreshing()
     }
-
+    
     /*override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    */
+     super.didReceiveMemoryWarning()
+     // Dispose of any resources that can be recreated.
+     }
+     */
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int
     {
@@ -167,11 +168,8 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         return 1
     }
     
-   
+    
     
     
     
 }
-
-
-
