@@ -12,7 +12,7 @@ import ObjectMapper
 class ProductListViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
     
     
-    let token = Utilities.sharedInstance.oauthResponse?.accessToken
+   
     let yourJsonFormat: String = "JSONurl"
     var strProdName: NSString = ""
     var strImageurl: NSString = ""
@@ -77,7 +77,7 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         DVC.getDesc = (arrDict[indexPath.row] as AnyObject) .value(forKey:"description") as! NSString as String
         DVC.getProdId = ((arrDict[indexPath.row] as AnyObject) .value(forKey:"id") as! NSString) as String
         DVC.getExpDate = (arrDict[indexPath.row] as AnyObject) .value(forKey:"expiryDate") as! NSInteger
-        // DVC.getTime = name[indexPath.row] as! String
+
         
         self.navigationController?.pushViewController(DVC, animated: true)
         
@@ -88,14 +88,7 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
         super.viewDidLoad()
         navigationItem.title = "Choose an Item"
         //navigationController?.navigationBar.barTintColor = UIColor(red: 224.0/255.0, green: 35.0/255.0, blue: 67.0/255.0, alpha: 1.0)
-        navigationController?.navigationBar.barTintColor = UIColor(red: 46/255, green: 130/255, blue: 100/255, alpha: 1.0)
-        /* if yourJsonFormat == "JSONFile" {
-         //jsonParsingFromFile()
-         jsonParsingFromURL()
-         } else {
-         jsonParsingFromURL()
-         }*/
-        
+        navigationController?.navigationBar.barTintColor = UIColor(red: 46/255, green: 130/255, blue: 100/255, alpha: 1.0)        
         jsonParsingFromURL()
         self.lstTableView.addSubview(self.refreshControl)
     }
@@ -115,12 +108,14 @@ class ProductListViewController: UIViewController,UITableViewDataSource,UITableV
     
     
     func jsonParsingFromURL () {
+        if GlobalVariables.sharedManager.myToken != "EmptyToken"
+        {
         let url = URL(string: "http://localhost:8996/api/productserv/product/list")
         var request = URLRequest(url: url! as URL)
-        request.addValue("bearer 98d216ca-2679-498c-a0c0-927190831ed5", forHTTPHeaderField: "Authorization")
-        //request.addValue("Bearer \(String(describing: token))", forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer \(GlobalVariables.sharedManager.myToken)", forHTTPHeaderField: "Authorization")
         NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main) {(response, data, error) in
             self.startParsing(data: data! as NSData)
+        }
         }
     }
     

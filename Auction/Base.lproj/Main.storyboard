@@ -218,7 +218,6 @@
                                         <state key="normal" title="Sign In"/>
                                         <connections>
                                             <action selector="SignIn:" destination="dX1-91-xiL" eventType="touchUpInside" id="Be3-jh-Vh4"/>
-                                            <segue destination="DiC-Nh-N2Q" kind="show" identifier="ProductListViewController" id="u9e-lK-P88"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -250,6 +249,7 @@
                         <outlet property="activityIndicator" destination="0no-d7-hxa" id="mwm-tm-p52"/>
                         <outlet property="password" destination="izK-p9-WMu" id="zD5-ab-lu4"/>
                         <outlet property="userName" destination="tOk-jZ-FhY" id="hKo-ca-QWK"/>
+                        <segue destination="DiC-Nh-N2Q" kind="show" identifier="ProductListViewController" id="na7-ks-09C"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RJ2-gc-v3J" sceneMemberID="firstResponder"/>

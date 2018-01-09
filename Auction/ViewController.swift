@@ -18,6 +18,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -118,7 +119,9 @@ extension ViewController {
             }
         // Save OAuth Info into model
         Utilities.sharedInstance.oauthResponse = Mapper<OAuthResponse>().map(JSON: responseJSON)
-        print(Utilities.sharedInstance.oauthResponse?.accessToken as Any)
+        print("Printing-->"+(Utilities.sharedInstance.oauthResponse?.accessToken)! as Any)
+        GlobalVariables.sharedManager.myToken = ""+String(describing: (Utilities.sharedInstance.oauthResponse?.accessToken)! as Any)
+       
         activityIndicator.stopAnimating()
         guard let _ = response as? [String : Any], let status = responseJSON["access_token"] as? String else {
             print("STATUS-------<><><><><>", responseJSON["access_token"] as? String as Any )
